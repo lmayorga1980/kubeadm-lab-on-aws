@@ -25,7 +25,7 @@
     - pause:
         seconds: 30  
 
-    - name: copy artefacts to nodes 
+    - name: copy artifacts to nodes 
       copy: 
         src: "{{ location }}/setup.sh"
         dest: "{{ location }}/setup.sh"
@@ -36,7 +36,12 @@
       shell: "chmod +x {{location}}/setup.sh"
 
     - name: Execute the command in remote shell; stdout goes to the specified file on the remote
-      shell: "{{location}}/setup.sh >> {{location}}/setup_output.txt"
+      shell: "{{location}}/setup.sh"
+      register: setup
+    
+    - name: debug setup
+      debug:
+        msg: setup.stdout
 
 - hosts: localhost
   become: true
@@ -150,7 +155,7 @@
 
     - name: Install kubectl
       get_url:
-        url: https://storage.googleapis.com/kubernetes-release/release/v1.28.2/bin/linux/amd64/kubectl
+        url: https://storage.googleapis.com/kubernetes-release/release/v1.31.0/bin/linux/amd64/kubectl
         dest: /usr/local/bin/
         mode: a+x
       become_user: root
